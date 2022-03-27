@@ -2,16 +2,22 @@ import TodoPage from "../../pages/TodoPage";
 
 const todopage = new TodoPage();
 
+//File reading constants
+const XLSX_FILE_NAME = "cypress/fixtures/excelData.xlsx";
+const XLSX_SHEET_NAME = "Sheet1";
+const JSON_DATA_FILE_NAME = "cypress/fixtures/xlsxData.json";
+const XLSX_DATA_CONSTANT = "xlsxData";
+
 let rowsLength;
 describe("Read Tasks from Excel FIle", () => {
   before(() => {
     //Read data from excel file , covert and write it to a json file
     cy.task("readXlsx", {
-      file: "cypress/fixtures/excelData.xlsx",
-      sheet: "Sheet1",
+      file: XLSX_FILE_NAME,
+      sheet: XLSX_SHEET_NAME,
     }).then((rows) => {
       rowsLength = rows.length;
-      cy.writeFile("cypress/fixtures/xlsxData.json", {
+      cy.writeFile(JSON_DATA_FILE_NAME, {
         rows,
       });
     });
@@ -26,24 +32,26 @@ describe("Read Tasks from Excel FIle", () => {
     cy.title().should("include", "TodoMVC");
   });
 
-  it("Add Tasks", function () {
-    //Read tasks from the jason file
-    cy.fixture("xlsxData").then(function (data) {
-      for (let i = 0; i < rowsLength; i++) {
-        //call the addItems method from todo page to add tasks
-        todopage.addItems(data.rows[i].tasksList);
-      }
+  //Get sample items for test cases
+  function getSampleItems(data) {
+    for (let i = 0; i < rowsLength; i++) {
+      //call the addItems method from todo page to add tasks
+      todopage.addItems(data.rows[i].tasksList);
+    }
+  }
 
+  it("Add Tasks to Todo List", function () {
+    //Read tasks from the jason file
+    cy.fixture(XLSX_DATA_CONSTANT).then(function (data) {
+      getSampleItems(data);
       cy.get("ul.todo-list").children().should("have.length", 3);
     });
   });
 
-  it("Edit todo items", () => {
+  it("Edit Todo Items of the List", () => {
     //Read tasks from the jason file
-    cy.fixture("xlsxData").then(function (data) {
-      for (let i = 0; i < rowsLength; i++) {
-        todopage.addItems(data.rows[i].tasksList);
-      }
+    cy.fixture(XLSX_DATA_CONSTANT).then(function (data) {
+      getSampleItems(data);
     });
     //call editItems method to edit tasks
     todopage.editItems(" Edited");
@@ -51,11 +59,9 @@ describe("Read Tasks from Excel FIle", () => {
     cy.get(".todo-list").contains("Edited");
   });
 
-  it("Complete todo items", () => {
-    cy.fixture("xlsxData").then(function (data) {
-      for (let i = 0; i < rowsLength; i++) {
-        todopage.addItems(data.rows[i].tasksList);
-      }
+  it("Complete Todo Items", () => {
+    cy.fixture(XLSX_DATA_CONSTANT).then(function (data) {
+      getSampleItems(data);
       //call completeItems method to complete tasks
       todopage.completeItems();
 
@@ -64,11 +70,9 @@ describe("Read Tasks from Excel FIle", () => {
     });
   });
 
-  it("Filter incomplete items", () => {
-    cy.fixture("xlsxData").then(function (data) {
-      for (let i = 0; i < rowsLength; i++) {
-        todopage.addItems(data.rows[i].tasksList);
-      }
+  it("Filter Incomplete Items from the List", () => {
+    cy.fixture(XLSX_DATA_CONSTANT).then(function (data) {
+      getSampleItems(data);
     });
 
     //call activeItems method to filter incomplete items tasks
@@ -78,11 +82,9 @@ describe("Read Tasks from Excel FIle", () => {
     cy.contains("Task 1").should("not.exist");
   });
 
-  it("Delete Completed items", () => {
-    cy.fixture("xlsxData").then(function (data) {
-      for (let i = 0; i < rowsLength; i++) {
-        todopage.addItems(data.rows[i].tasksList);
-      }
+  it("Delete Completed Items from the List", () => {
+    cy.fixture(XLSX_DATA_CONSTANT).then(function (data) {
+      getSampleItems(data);
     });
 
     todopage.completeItems();
