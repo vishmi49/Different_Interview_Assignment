@@ -57,8 +57,7 @@ Automation suite created to automate test cases for Todos application. Implement
 
 2. Select the datafromexcel.js  test script to execute the test cases.
 
-![testRunner](C:\Users\Vishmi\Pictures\Screenshots\testRunner.png)
-
+![testRunner](https://user-images.githubusercontent.com/54719880/160291255-2b082afd-f917-499a-85ab-d9b5a56b5883.png)
 
 
 ### FAQ
