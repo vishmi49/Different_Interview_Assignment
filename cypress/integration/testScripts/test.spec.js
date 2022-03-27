@@ -15,9 +15,7 @@ describe('example to-do app', () => {
     afterEach(() =>{
         cy.scrollTo('top')
     })
-        
-    
-
+         
     it('Add todo items', () => {
      
     todopage.addItems('Task 1')
@@ -50,9 +48,7 @@ describe('example to-do app', () => {
                 todopage.completeItems()
                 todopage.activeItems()
                 cy.contains('Task 1').should('not.exist')
-
-
-               
+            
                
                })
 
