@@ -23,8 +23,7 @@ describe("Read Tasks from Excel FIle", () => {
     todopage.visit();
 
     //Verify the webpage
-    cy.title().should('include', 'TodoMVC')
-    
+    cy.title().should("include", "TodoMVC");
   });
 
   it("Add Tasks", function () {
@@ -35,8 +34,7 @@ describe("Read Tasks from Excel FIle", () => {
         todopage.addItems(data.rows[i].tasksList);
       }
 
-      cy.get("ul.todo-list").children()
-      .should("have.length", 3)
+      cy.get("ul.todo-list").children().should("have.length", 3);
     });
   });
 
@@ -61,8 +59,8 @@ describe("Read Tasks from Excel FIle", () => {
       //call completeItems method to complete tasks
       todopage.completeItems();
 
-      //verify the completed task is removed  
-      cy.get("ul.todo-list").children().should("have.length", 2)
+      //verify the completed task is removed
+      cy.get("ul.todo-list").children().should("have.length", 2);
     });
   });
 
